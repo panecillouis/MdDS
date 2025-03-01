@@ -30,7 +30,6 @@
  */
 package org.owasp.webgoat.container;
 
-import lombok.AllArgsConstructor;
 import org.owasp.webgoat.container.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -42,7 +41,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import lombok.AllArgsConstructor;
 
 /** Security configuration for WebGoat. */
 @Configuration
@@ -85,7 +87,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Autowired
   public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(userDetailsService);
+    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder()); // BCryptPasswordEncoder, para autenticar la password
   }
 
   @Bean
@@ -100,9 +102,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     return super.authenticationManager();
   }
 
-  @SuppressWarnings("deprecation")
+  //@SuppressWarnings("deprecation") no es necesario porque BCryptPasswordEncoder es el recomendado
   @Bean
-  public NoOpPasswordEncoder passwordEncoder() {
-    return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+  public PasswordEncoder passwordEncoder() {
+    //return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance(); //no es recomendado
+    return new BCryptPasswordEncoder();
   }
 }

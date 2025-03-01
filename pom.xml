@@ -105,6 +105,7 @@
   </issueManagement>
 
   <properties>
+    <sonar.coverage.exclusions>**/*</sonar.coverage.exclusions>
     <sonar.organization>panecillouis</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
@@ -705,7 +706,7 @@
                 </goals>
                 <configuration>
                   <destFile>${project.build.directory}/jacoco/jacoco-ut.exec</destFile>
-                  <propertyName>surefire.jacoco.args</propertyName>
+                  <propertyName>surefire.jacoco-maven-plugin</propertyName>
                 </configuration>
               </execution>
               <execution>
